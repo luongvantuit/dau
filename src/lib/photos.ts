@@ -79,15 +79,16 @@ export function carouselPhotos(photos: Photo[]): Photo[] {
   );
 }
 
-/** Bảy hiệu ứng dùng xen kẽ trong gallery, theo đúng thứ tự lặp lại. */
+/**
+ * Hiệu ứng dùng xen kẽ trong gallery. Chỉ giữ loại không đổi màu và vẫn nhìn
+ * rõ được ảnh: dithering và halftone thay hẳn bảng màu (xanh lá, CMYK), còn
+ * fluted-glass với lens-distortion cắt vụn khuôn mặt. Gallery là chỗ để xem
+ * ảnh, không phải chỗ khoe shader; các hiệu ứng còn lại vẫn dùng được cho
+ * từng ảnh cụ thể qua overrides.
+ */
 export const GALLERY_EFFECTS = [
   "paper-texture",
-  "fluted-glass",
   "water",
-  "image-dithering",
-  "halftone-dots",
-  "lens-distortion",
-  "halftone-cmyk",
 ] as const satisfies readonly ShaderEffect[];
 
 // Cứ 4 ảnh thì 1 ảnh có shader. Mỗi shader là một WebGL context riêng; Chrome

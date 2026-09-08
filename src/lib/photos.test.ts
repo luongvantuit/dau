@@ -120,6 +120,12 @@ describe("withGalleryEffects", () => {
     expect(shaded.length).toBeLessThanOrEqual(12);
   });
 
+  it("chỉ dùng hiệu ứng giữ nguyên màu và còn nhìn rõ ảnh", () => {
+    // Dithering/halftone đổi hẳn màu, fluted-glass/lens-distortion cắt vụn
+    // khuôn mặt. Gallery là chỗ để xem ảnh nên chỉ nhận hiệu ứng nhẹ.
+    expect([...GALLERY_EFFECTS]).toEqual(["paper-texture", "water"]);
+  });
+
   it("xoay vòng qua đủ các hiệu ứng thay vì lặp một loại", () => {
     const used = new Set(
       withGalleryEffects(base()).filter((p) => p.effect !== "none").map((p) => p.effect),
