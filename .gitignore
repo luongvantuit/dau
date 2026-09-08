@@ -43,3 +43,6 @@ next-env.d.ts
 # Ảnh gốc từ máy ảnh (337MB) — KHÔNG commit.
 # Chạy `pnpm photos` để sinh bản tối ưu vào public/photos/, chỉ bản đó mới lên git.
 /photos/
+
+# Ảnh chụp/log do Playwright MCP sinh ra khi kiểm tra giao diện.
+/.playwright-mcp/
