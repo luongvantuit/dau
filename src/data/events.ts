@@ -1,5 +1,18 @@
+// Đúng 10 shader của @paper-design/shaders-react nhận ảnh làm input, cộng "none".
+// Các shader khác trong gói (mesh-gradient, swirl, waves...) chỉ vẽ hoạ tiết,
+// không nhận ảnh, nên không nằm ở đây.
 export type ShaderEffect =
-  | "none" | "water" | "fluted-glass" | "lens-distortion" | "dithering";
+  | "none"
+  | "paper-texture"
+  | "fluted-glass"
+  | "water"
+  | "image-dithering"
+  | "halftone-dots"
+  | "halftone-cmyk"
+  | "lens-distortion"
+  | "liquid-metal"
+  | "gem-smoke"
+  | "heatmap";
 
 /** Phần người viết, khoá theo id ảnh trong PHOTO_MANIFEST. Mọi field tuỳ chọn. */
 export type PhotoOverride = {
@@ -47,7 +60,11 @@ export const EVENTS: SiteEvent[] = [
     palette: ["#ffd9e8", "#fff4d6", "#d9ecff", "#f0dcff"],
     gallery: {
       layout: "carousel-3d",
-      defaultEffect: "water",
+      // Ảnh để nguyên. Shader chỉ dùng ở nền phía sau — phủ lên ảnh thì
+      // fluted-glass cắt thành sọc, halftone/dithering phá hết chi tiết, và
+      // không còn nhìn ra mặt bé nữa. Muốn thử cho một ảnh cụ thể thì đặt
+      // effect trong overrides.
+      defaultEffect: "none",
       photoDir: "sinh-nhat-1-tuoi",
     },
   },

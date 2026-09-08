@@ -25,9 +25,9 @@ export function Carousel3D({ photos }: { photos: Photo[] }) {
             <motion.div
               key={`slot-${offset}`}
               aria-hidden
-              className="absolute hidden w-[38%] max-w-[300px] overflow-hidden rounded-2xl shadow-xl md:block"
+              className="absolute hidden w-[34%] max-w-[340px] overflow-hidden rounded-2xl shadow-xl md:block"
               animate={{
-                x: `${offset * 62}%`,
+                x: `${offset * 78}%`,
                 rotateY: offset * -18,
                 rotate: neighbour.tilt,
                 scale: 1 - Math.abs(offset) * 0.12,
@@ -42,7 +42,7 @@ export function Carousel3D({ photos }: { photos: Photo[] }) {
 
         {/* Ảnh giữa: WebGL context DUY NHẤT cho ảnh. Không bọc AnimatePresence
             quanh ShaderPhoto — remount sẽ tạo context mới mỗi lần bấm. */}
-        <div className="relative z-10 aspect-[2/3] w-[72%] max-w-[420px] overflow-hidden rounded-3xl shadow-2xl">
+        <div className="relative z-10 w-[86%] max-w-[560px] overflow-hidden rounded-3xl shadow-2xl ring-1 ring-border/40">
           <ShaderPhoto photo={active} effect={active.effect} />
         </div>
       </div>
