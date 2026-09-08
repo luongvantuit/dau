@@ -76,12 +76,30 @@ export function Carousel3D({ photos }: { photos: Photo[] }) {
           );
         })}
 
-        {/* Ảnh giữa: WebGL context DUY NHẤT cho ảnh. Không bọc AnimatePresence
-            quanh ShaderPhoto — remount sẽ tạo context mới mỗi lần bấm. */}
         {/* Khung tỉ lệ cố định: thiếu nó thì mỗi ảnh tự quyết chiều cao và
             cả hàng nhảy giật mỗi lần chuyển ảnh. */}
         <div className="relative z-10 aspect-[2/3] w-[70%] max-w-[380px] overflow-hidden rounded-3xl shadow-2xl ring-1 ring-border/40">
-          <ShaderPhoto photo={active} effect={active.effect} />
+          {active.effect === "none" ? (
+            // Không có shader thì ShaderPhoto chỉ là một thẻ img, remount không
+            // tốn gì — nên chồng hai ảnh và hoà tan giữa chúng.
+            <AnimatePresence initial={false} mode="sync">
+              <motion.div
+                key={active.id}
+                className="absolute inset-0"
+                initial={{ opacity: 0, scale: 1.06 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.97 }}
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <ShaderPhoto photo={active} effect={active.effect} />
+              </motion.div>
+            </AnimatePresence>
+          ) : (
+            // Có shader thì giữ đúng MỘT instance, tuyệt đối không bọc
+            // AnimatePresence: mỗi lần remount là một WebGL context mới, mà
+            // trình duyệt chỉ cấp khoảng 16 context cho cả trang.
+            <ShaderPhoto photo={active} effect={active.effect} />
+          )}
         </div>
       </div>
 

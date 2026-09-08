@@ -232,6 +232,17 @@
     animation: glass-grow-bar 850ms cubic-bezier(0.22, 1, 0.36, 1) 250ms both;
   }
 
+  /* Màn hẹp: bỏ hẳn phần nở. Ở đây thanh gần như đã chiếm trọn bề ngang nên
+     quãng biến hình quá ngắn để đọc ra được — nở đi 158px trên màn 390px, còn
+     co vào thì chỉ đúng 24px lề. Cả hai đều thành một cái giật rồi thôi, nên
+     để nó hiện luôn; phần nội dung bên trong vẫn có hiệu ứng vào riêng. */
+  @media (max-width: 639px) {
+    .header-bar,
+    .footer-card {
+      animation: none;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .header-bar,
     .footer-card,

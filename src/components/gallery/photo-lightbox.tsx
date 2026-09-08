@@ -62,7 +62,9 @@ export function PhotoLightbox({
           role="dialog"
           aria-modal="true"
           aria-label={photo.alt}
-          className="fixed inset-0 z-[60] flex flex-col items-center justify-center gap-4 bg-foreground/92 p-4 backdrop-blur-sm"
+          // z cao hơn GlassScrollbar (z-70): thanh cuộn tự vẽ mà nổi đè lên lightbox
+          // thì rê ra mép phải vẫn kéo được nó, và trang phía sau chạy theo.
+          className="fixed inset-0 z-[90] flex flex-col items-center justify-center gap-4 bg-foreground/92 p-4 backdrop-blur-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
