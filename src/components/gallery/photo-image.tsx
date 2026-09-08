@@ -15,8 +15,9 @@ export function PhotoImage({
   className?: string;
 }) {
   return (
-    // eslint-disable-next-line @next/next/no-img-element -- images.unoptimized khiến
-    // next/image bỏ luôn srcSet, nên viết tay mới chọn được đúng cỡ ảnh.
+    // images.unoptimized khiến next/image bỏ luôn srcSet, nên phải viết tay
+    // mới chọn được đúng cỡ ảnh cho từng màn hình.
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       src={photo.src}
       srcSet={photo.srcSet.map((item) => `${item.src} ${item.w}w`).join(", ")}
