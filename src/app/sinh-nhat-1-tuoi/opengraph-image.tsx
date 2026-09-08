@@ -2,8 +2,8 @@ import { ImageResponse } from "next/og";
 
 import { SITE } from "@/data/site";
 import { formatDateNumeric } from "@/lib/dates";
-import { getEvent, getEventAge } from "@/lib/events";
-import { loadOgFonts } from "@/lib/og";
+import { getEvent } from "@/lib/events";
+import { loadOgFonts, loadOgPhoto } from "@/lib/og";
 import { getPhotos } from "@/lib/photos";
 
 // output: "export" không có runtime, nên route ảnh phải được đánh dấu tĩnh;
@@ -20,8 +20,11 @@ export default async function Image() {
   const event = getEvent(SLUG);
   if (!event) return new Response("Not found", { status: 404 });
 
-  const age = getEventAge(event);
-  const photoCount = getPhotos(event).length;
+  const photos = getPhotos(event);
+  const photoCount = photos.length;
+  // Ảnh thật là thứ đáng giá nhất trên tấm chia sẻ: chỉ có chữ trên nền gradient
+  // thì lên Zalo hay Messenger nhìn như tấm thiệp, không ai biết là ảnh em bé.
+  const cover = await loadOgPhoto(event.gallery.photoDir, photos[0].id, 380, 538);
 
   return new ImageResponse(
     (
@@ -36,23 +39,6 @@ export default async function Image() {
           position: "relative",
         }}
       >
-        {/* Số tuổi làm hoa văn chìm bên phải. Satori không có opacity trên
-            text nên dùng màu trắng pha sẵn thay vì rgba trên chữ đặc. */}
-        <div
-          style={{
-            display: "flex",
-            position: "absolute",
-            right: -60,
-            bottom: -190,
-            fontSize: 620,
-            fontFamily: "Baloo 2",
-            color: "rgba(255,255,255,0.30)",
-            lineHeight: 1,
-          }}
-        >
-          {age > 0 ? age : "0"}
-        </div>
-
         {/* Vạch màu dọc mép trái, lấy màu nhấn của trang. */}
         <div style={{ width: 16, height: "100%", background: "#e08a4c" }} />
 
@@ -62,7 +48,7 @@ export default async function Image() {
             flexDirection: "column",
             justifyContent: "center",
             gap: 6,
-            padding: "0 70px",
+            padding: "0 56px",
             flex: 1,
           }}
         >
@@ -92,7 +78,7 @@ export default async function Image() {
             <div style={{ display: "flex" }}>{SITE.fullName}</div>
           </div>
 
-          <div style={{ display: "flex", fontSize: 96, fontFamily: "Baloo 2", lineHeight: 1.15, marginTop: 6 }}>
+          <div style={{ display: "flex", fontSize: 72, fontFamily: "Baloo 2", lineHeight: 1.15, marginTop: 6 }}>
             {event.title}
           </div>
 
@@ -106,6 +92,18 @@ export default async function Image() {
             <div style={{ display: "flex", width: 7, height: 7, borderRadius: 4, background: "#1c3049", opacity: 0.35 }} />
             <div style={{ display: "flex", fontSize: 30, opacity: 0.8 }}>{`${photoCount} khoảnh khắc`}</div>
           </div>
+        </div>
+
+        {/* Ảnh bìa. Bo góc và chừa lề để nó đọc ra như một tấm ảnh đặt lên nền,
+            chứ không phải nửa khung hình bị cắt đôi. */}
+        <div style={{ display: "flex", padding: "46px 46px 46px 0" }}>
+          <img
+            src={cover}
+            width={380}
+            height={538}
+            style={{ borderRadius: 28, objectFit: "cover", boxShadow: "0 20px 44px rgba(28,48,73,0.28)" }}
+            alt=""
+          />
         </div>
       </div>
     ),

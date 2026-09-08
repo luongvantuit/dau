@@ -73,8 +73,12 @@ export function PhotoLightbox({
           <motion.figure
             key={photo.id}
             className="flex max-h-[78vh] flex-col items-center gap-3"
-            initial={{ opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
+            // KHÔNG mờ dần lúc vào: ảnh mờ 16px nằm ngay trong thẻ img này, mà
+            // cho cả figure chạy từ opacity 0 thì đúng quãng nó cần làm việc
+            // lại là lúc nó vô hình — người dùng thấy nền tối trống trơn. Lặp
+            // lại mỗi lần bấm ảnh sau, vì key={photo.id} dựng lại từ đầu.
+            initial={{ scale: 0.94 }}
+            animate={{ scale: 1 }}
             exit={{ opacity: 0, scale: 0.97 }}
             transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             drag="x"

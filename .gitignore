@@ -44,5 +44,9 @@ next-env.d.ts
 # Chạy `pnpm photos` để sinh bản tối ưu vào public/photos/, chỉ bản đó mới lên git.
 /photos/
 
+# Ảnh gốc của bìa nhạc. Bản .webp trong public/music/ mới là bản được commit;
+# file nhạc thì nằm thẳng ở public/music/ vì không qua bước xử lý nào.
+/music/
+
 # Ảnh chụp/log do Playwright MCP sinh ra khi kiểm tra giao diện.
 /.playwright-mcp/
