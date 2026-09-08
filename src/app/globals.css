@@ -2,6 +2,10 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+/* Giữ lại dù đã bỏ dark mode: nếu xoá dòng này, Tailwind đưa `dark:` về mặc
+   định là prefers-color-scheme, và hàng loạt tiện ích dark: có sẵn trong
+   component shadcn sẽ tự bật theo hệ điều hành trong khi token màu vẫn là
+   bảng sáng -> lệch màu. Trỏ vào .dark (không còn tồn tại) thì chúng tắt hẳn. */
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -50,6 +54,10 @@
 }
 
 :root {
+  /* Trang chỉ có nền sáng; báo cho trình duyệt để thanh cuộn và các control
+     mặc định vẽ theo tông sáng. */
+  color-scheme: light;
+
   --background: oklch(0.985 0.012 85);
   --foreground: oklch(0.32 0.045 320);
   --card: oklch(1 0.006 85);
@@ -84,39 +92,6 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-.dark {
-  --background: oklch(0.19 0.03 300);
-  --foreground: oklch(0.95 0.015 320);
-  --card: oklch(0.24 0.035 300);
-  --card-foreground: oklch(0.95 0.015 320);
-  --popover: oklch(0.24 0.035 300);
-  --popover-foreground: oklch(0.95 0.015 320);
-  --primary: oklch(0.78 0.13 350);
-  --primary-foreground: oklch(0.20 0.04 350);
-  --secondary: oklch(0.30 0.04 260);
-  --secondary-foreground: oklch(0.93 0.02 260);
-  --muted: oklch(0.27 0.03 300);
-  --muted-foreground: oklch(0.70 0.03 320);
-  --accent: oklch(0.32 0.05 220);
-  --accent-foreground: oklch(0.93 0.02 220);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 12%);
-  --input: oklch(1 0 0 / 16%);
-  --ring: oklch(0.78 0.13 350);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-}
 
 @layer base {
   * {

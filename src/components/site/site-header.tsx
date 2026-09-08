@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-import { ThemeToggle } from "@/components/site/theme-toggle";
 import { SITE } from "@/data/site";
 import { getAllEvents } from "@/lib/events";
 
@@ -25,8 +24,6 @@ export function SiteHeader() {
             </Link>
           ))}
         </div>
-
-        <ThemeToggle />
       </nav>
     </header>
   );
