@@ -78,36 +78,3 @@ export function carouselPhotos(photos: Photo[]): Photo[] {
     (photo) => Math.abs(photo.width / photo.height - CAROUSEL_RATIO) < CAROUSEL_TOLERANCE,
   );
 }
-
-/**
- * Hiệu ứng dùng xen kẽ trong gallery. Chỉ giữ loại không đổi màu và vẫn nhìn
- * rõ được ảnh: dithering và halftone thay hẳn bảng màu (xanh lá, CMYK), còn
- * fluted-glass với lens-distortion cắt vụn khuôn mặt. Gallery là chỗ để xem
- * ảnh, không phải chỗ khoe shader; các hiệu ứng còn lại vẫn dùng được cho
- * từng ảnh cụ thể qua overrides.
- */
-export const GALLERY_EFFECTS = [
-  "paper-texture",
-  "water",
-] as const satisfies readonly ShaderEffect[];
-
-// Cứ 4 ảnh thì 1 ảnh có shader. Mỗi shader là một WebGL context riêng; Chrome
-// giới hạn ~16 context mỗi trang và iOS Safari còn ít hơn, vượt trần thì
-// trình duyệt thu hồi context cũ và canvas hoá trắng. 29 ảnh -> 8 shader,
-// cộng 1 canvas nền là 9, nằm trong ngưỡng an toàn của cả điện thoại.
-const GALLERY_STRIDE = 4;
-
-/**
- * Gán hiệu ứng xen kẽ cho gallery. Ảnh đã được chỉ định effect riêng trong
- * overrides thì giữ nguyên, không bị nhịp này đè lên.
- */
-export function withGalleryEffects(photos: Photo[]): Photo[] {
-  let cursor = 0;
-  return photos.map((photo, index) => {
-    if (photo.effect !== "none") return photo;
-    if (index % GALLERY_STRIDE !== 0) return { ...photo, effect: "none" };
-    const effect = GALLERY_EFFECTS[cursor % GALLERY_EFFECTS.length];
-    cursor += 1;
-    return { ...photo, effect };
-  });
-}

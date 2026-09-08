@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 import { SITE } from "@/data/site";
 import { formatDateVi } from "@/lib/dates";
-import { getAllEvents, getEvent } from "@/lib/events";
+import { getEvent } from "@/lib/events";
 import { loadOgFonts } from "@/lib/og";
 
 // output: "export" không có runtime, nên route ảnh phải được đánh dấu tĩnh;
@@ -13,13 +13,10 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export const alt = "Ảnh chia sẻ";
 
-export function generateStaticParams() {
-  return getAllEvents().map((event) => ({ slug: event.slug }));
-}
+const SLUG = "sinh-nhat-1-tuoi";
 
-export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const event = getEvent(slug);
+export default async function Image() {
+  const event = getEvent(SLUG);
   if (!event) return new Response("Not found", { status: 404 });
 
   return new ImageResponse(

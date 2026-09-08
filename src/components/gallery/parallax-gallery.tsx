@@ -8,13 +8,13 @@
 // - số cột đổi theo màn hình, và tôn trọng prefers-reduced-motion
 
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import { cn } from "cn";
 import { useMedia } from "@/hooks/use-media";
 import type { Photo } from "@/lib/photos";
 import { PhotoImage } from "./photo-image";
-import { ShaderPhoto } from "./shader-photo";
+import { PhotoLightbox } from "./photo-lightbox";
 
 /** Mỗi cột trôi một quãng khác nhau thì mới thấy được độ lệch. */
 const COLUMN_SHIFT = [-140, 90, -60];
@@ -27,6 +27,7 @@ export function ParallaxGallery({
   className?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
   const reducedMotion = useReducedMotion();
   // Chia cột bằng JS chứ không ẩn cột bằng CSS: ẩn thì mất hẳn số ảnh nằm
   // trong cột đó trên điện thoại.
@@ -73,19 +74,20 @@ export function ParallaxGallery({
               key={photo.id}
               className="overflow-hidden rounded-2xl shadow-lg ring-1 ring-border/40"
             >
-              {photo.effect === "none" ? (
+              <button
+                type="button"
+                // Vị trí trong mảng gốc, không phải trong cột: lightbox lướt qua
+                // cả 29 ảnh theo đúng thứ tự thời gian.
+                onClick={() => setOpenIndex(photos.indexOf(photo))}
+                aria-label={`Mở ảnh: ${photo.alt}`}
+                className="block w-full cursor-zoom-in"
+              >
                 <PhotoImage
                   photo={photo}
                   sizes="(max-width: 768px) 50vw, 33vw"
                   className="transition-transform duration-700 hover:scale-[1.03]"
                 />
-              ) : (
-                // Shader vẽ ra canvas không có kích thước nội tại, nên phải
-                // đặt sẵn tỉ lệ của chính ảnh đó, nếu không ô sẽ sập về 0.
-                <div style={{ aspectRatio: `${photo.width} / ${photo.height}` }}>
-                  <ShaderPhoto photo={photo} effect={photo.effect} />
-                </div>
-              )}
+              </button>
               {photo.caption ? (
                 <figcaption className="bg-card/70 px-3 py-2 font-sans text-xs text-muted-foreground backdrop-blur">
                   {photo.caption}
@@ -95,6 +97,13 @@ export function ParallaxGallery({
           ))}
         </motion.div>
       ))}
+
+      <PhotoLightbox
+        photos={photos}
+        index={openIndex}
+        onClose={() => setOpenIndex(null)}
+        onChange={setOpenIndex}
+      />
     </div>
   );
 }

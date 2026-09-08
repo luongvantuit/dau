@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Baloo_2, Be_Vietnam_Pro } from "next/font/google";
 
+import { MusicButton } from "@/components/site/music-button";
 import { SiteHeader } from "@/components/site/site-header";
 import { SITE } from "@/data/site";
 import { MotionProvider } from "@/providers/motion-provider";
@@ -40,6 +41,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <MotionProvider>
           <SiteHeader />
           {children}
+          <MusicButton />
         </MotionProvider>
       </body>
     </html>

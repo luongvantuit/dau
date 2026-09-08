@@ -5,12 +5,17 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { useMedia } from "@/hooks/use-media";
 import type { Photo } from "@/lib/photos";
 import { PhotoImage } from "./photo-image";
 import { ShaderPhoto } from "./shader-photo";
 
 export function Carousel3D({ photos }: { photos: Photo[] }) {
   const [index, setIndex] = useState(0);
+  // Màn hẹp chỉ đủ chỗ cho một ảnh mỗi bên; nhồi bốn ảnh thì chúng chồng lên
+  // ảnh giữa. Trước đây tôi ẩn hẳn nên trên điện thoại mất luôn hiệu ứng xoè.
+  const wide = useMedia("(min-width: 768px)");
+  const offsets = wide ? [-2, -1, 1, 2] : [-1, 1];
   const active = photos[index];
   const move = (step: number) =>
     setIndex((current) => (current + step + photos.length) % photos.length);
@@ -19,16 +24,16 @@ export function Carousel3D({ photos }: { photos: Photo[] }) {
     <div className="flex flex-col items-center gap-6">
       <div className="relative flex w-full items-center justify-center [perspective:1400px]">
         {/* Ảnh hai bên: chỉ là <img> xoay bằng CSS, không tốn WebGL context. */}
-        {[-2, -1, 1, 2].map((offset) => {
+        {offsets.map((offset) => {
           const neighbour = photos[(index + offset + photos.length) % photos.length];
           return (
             <motion.div
               key={`slot-${offset}`}
               aria-hidden
-              className="absolute hidden aspect-[2/3] w-[30%] max-w-[260px] overflow-hidden rounded-2xl shadow-xl md:block"
+              className="absolute aspect-[2/3] w-[32%] max-w-[260px] overflow-hidden rounded-2xl shadow-xl"
               animate={{
-                x: `${offset * 72}%`,
-                rotateY: offset * -18,
+                x: `${offset * (wide ? 72 : 58)}%`,
+                rotateY: offset * (wide ? -18 : -12),
                 rotate: neighbour.tilt,
                 scale: 1 - Math.abs(offset) * 0.12,
                 opacity: 1 - Math.abs(offset) * 0.32,

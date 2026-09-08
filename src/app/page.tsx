@@ -12,22 +12,22 @@ export default function Home() {
   return (
     <>
       <BackgroundMesh palette={palette} />
-      <main className="flex flex-1 flex-col gap-16 py-24">
+      <main className="flex flex-1 flex-col gap-10 py-12 md:gap-16 md:py-20">
         <AnimatedGroup
           as="header"
           preset="blur-slide"
-          className="mx-auto flex max-w-3xl flex-col items-center gap-4 px-6 text-center"
+          className="mx-auto flex max-w-3xl flex-col items-center gap-3 px-5 text-center"
         >
           <TextEffect
             as="h1"
             per="char"
             preset="fade-in-blur"
             speedSegment={1.6}
-            className="text-7xl font-extrabold sm:text-8xl md:text-9xl"
+            className="text-5xl font-extrabold sm:text-7xl md:text-8xl"
           >
             {SITE.name}
           </TextEffect>
-          <p className="font-sans text-lg text-muted-foreground md:text-xl">{SITE.fullName}</p>
+          <p className="font-sans text-base text-muted-foreground sm:text-lg">{SITE.fullName}</p>
           <p className="max-w-prose font-sans text-base text-muted-foreground">
             {SITE.description}
           </p>

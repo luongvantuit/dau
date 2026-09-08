@@ -16,13 +16,24 @@ export function BackgroundMesh({ palette }: { palette: readonly string[] }) {
     >
       <MeshGradient
         colors={[...palette]}
-        distortion={0.8}
-        swirl={0.6}
-        speed={reducedMotion ? 0 : 0.15}
+        distortion={0.9}
+        swirl={0.45}
+        speed={reducedMotion ? 0 : 0.12}
         style={{ width: "100%", height: "100%" }}
       />
-      {/* Làm dịu nền để chữ đọc được ở cả sáng lẫn tối. */}
-      <div className="absolute inset-0 bg-background/55 backdrop-blur-2xl" />
+
+      {/* Bản trước phủ bg-background/55 + backdrop-blur-2xl lên toàn trang, làm
+          màu bệt thành xám bùn. Giờ chỉ làm sáng nhẹ và đều bằng một lớp mỏng,
+          giữ nguyên độ trong của màu. */}
+      <div className="absolute inset-0 bg-background/35" />
+
+      {/* Dải sáng dọc: đậm ở hai đầu, trong ở giữa. Nhờ vậy chữ ở đầu trang và
+          chân trang luôn đủ tương phản, còn khoảng giữa vẫn thấy rõ chuyển
+          động của shader. */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-background/25 to-background" />
+
+      {/* Vệt tối bốn góc, kéo mắt vào giữa thay vì để nền loang đều. */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,color-mix(in_oklch,var(--foreground)_10%,transparent)_100%)]" />
     </div>
   );
 }

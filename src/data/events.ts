@@ -59,7 +59,7 @@ export const EVENTS: SiteEvent[] = [
     tagline: "Một vòng mặt trời đầu tiên",
     description:
       "Đậu tròn một tuổi. Những bước đi đầu, tiếng cười đầu, và một ngày đầy bóng bay.",
-    palette: ["#ffd9e8", "#fff4d6", "#d9ecff", "#f0dcff"],
+    palette: ["#dce6f2", "#f5e0cd", "#cdd9e8", "#fff6ec"],
     gallery: {
       layout: "carousel-3d",
       // Ảnh để nguyên. Shader chỉ dùng ở nền phía sau — phủ lên ảnh thì
@@ -68,8 +68,8 @@ export const EVENTS: SiteEvent[] = [
       // effect trong overrides.
       defaultEffect: "none",
       photoDir: "sinh-nhat-1-tuoi",
-      // Hai tấm này chỉ có ba mẹ, không có Đậu.
-      exclude: ["DSC05926", "IMG_8288"],
+      // DSC05926 và IMG_8288 chỉ có ba mẹ, không có Đậu. DSC05635 bỏ theo yêu cầu.
+      exclude: ["DSC05926", "IMG_8288", "DSC05635"],
     },
   },
 ];
