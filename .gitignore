@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Ảnh gốc từ máy ảnh (337MB) — KHÔNG commit.
+# Chạy `pnpm photos` để sinh bản tối ưu vào public/photos/, chỉ bản đó mới lên git.
+/photos/
