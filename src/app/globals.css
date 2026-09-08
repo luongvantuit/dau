@@ -130,16 +130,13 @@
     /* Trang chủ ngắn, trang sự kiện dài -> thanh cuộn xuất hiện rồi biến mất
        làm nội dung nhảy ngang mỗi lần điều hướng. Chừa sẵn máng cuộn thì bề
        rộng khung nhìn không đổi nữa. */
+    /* scrollbar-gutter một mình không đủ: <html> có h-full nên không phải khung
+       cuộn, trình duyệt bỏ qua gutter. overflow-y: scroll ép máng cuộn luôn
+       hiện, bề rộng khung nhìn cố định ở mọi trang. */
     scrollbar-gutter: stable;
+    overflow-y: scroll;
     scrollbar-width: thin;
     scrollbar-color: color-mix(in oklch, var(--foreground) 25%, transparent) transparent;
-  }
-
-  /* Safari chưa hỗ trợ scrollbar-gutter: ép luôn thanh cuộn để không nhảy. */
-  @supports not (scrollbar-gutter: stable) {
-    html {
-      overflow-y: scroll;
-    }
   }
 
   ::-webkit-scrollbar {
