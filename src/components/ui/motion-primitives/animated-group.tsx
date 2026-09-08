@@ -1,3 +1,9 @@
+/* eslint-disable react-hooks/static-components --
+ * Component của tailark, API đa hình qua prop `as`, nên component motion phải
+ * được chọn lúc chạy. Lỗi thật mà quy tắc này nhắm tới (tạo lại component mỗi
+ * render, làm mất state cây con) đã được vá bằng cache motionComponents ở mức
+ * module bên dưới; quy tắc không lần được qua lời gọi hàm nên vẫn báo.
+ */
 'use client'
 import React, { type ReactNode } from 'react'
 import { motion, type Variants } from 'motion/react'
@@ -89,6 +95,19 @@ const addDefaultVariants = (variants: Variants) => ({
     visible: { ...defaultItemVariants.visible, ...variants.visible },
 })
 
+// Cache ở mức module: gọi motion.create() trong thân render sẽ sinh component
+// mới mỗi lần render, làm mất state cây con và huỷ animation đang chạy.
+// (motion() cũ đã deprecated nên dùng motion.create().)
+const motionComponents = new Map<React.ElementType, React.ElementType>()
+
+function motionFor(tag: React.ElementType): React.ElementType {
+    const cached = motionComponents.get(tag)
+    if (cached) return cached
+    const created = motion.create(tag as React.ElementType & string)
+    motionComponents.set(tag, created)
+    return created
+}
+
 function AnimatedGroup({ children, className, variants, preset, as = 'div', asChild = 'div' }: AnimatedGroupProps) {
     const selectedVariants = {
         item: addDefaultVariants(preset ? presetVariants[preset] : {}),
@@ -97,9 +116,9 @@ function AnimatedGroup({ children, className, variants, preset, as = 'div', asCh
     const containerVariants = variants?.container || selectedVariants.container
     const itemVariants = variants?.item || selectedVariants.item
 
-    const MotionComponent = motion(as)
+    const MotionComponent = motionFor(as)
 
-    const MotionChild = motion(asChild)
+    const MotionChild = motionFor(asChild)
 
     return (
         <MotionComponent

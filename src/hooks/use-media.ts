@@ -1,22 +1,28 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
+import { useCallback, useSyncExternalStore } from "react";
 
+/**
+ * Theo dõi một media query. Dùng useSyncExternalStore thay vì useState +
+ * useEffect: matchMedia là nguồn dữ liệu ngoài React, và cách này không gây
+ * render thừa ở lần mount đầu.
+ *
+ * Server không biết kích thước màn hình nên trả về true (giả định màn rộng);
+ * client tự chỉnh lại ngay khi hydrate.
+ */
 export function useMedia(query: string): boolean {
-    const [matches, setMatches] = useState(true)
+  const subscribe = useCallback(
+    (onChange: () => void) => {
+      const list = window.matchMedia(query);
+      list.addEventListener("change", onChange);
+      return () => list.removeEventListener("change", onChange);
+    },
+    [query],
+  );
 
-    useEffect(() => {
-        const matchMedia = window.matchMedia(query)
-        setMatches(matchMedia.matches)
-
-        const handleChange = () => setMatches(matchMedia.matches)
-
-        matchMedia.addEventListener('change', handleChange)
-
-        return () => {
-            matchMedia.removeEventListener('change', handleChange)
-        }
-    }, [query])
-
-    return matches
+  return useSyncExternalStore(
+    subscribe,
+    () => window.matchMedia(query).matches,
+    () => true,
+  );
 }

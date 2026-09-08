@@ -2,28 +2,24 @@
 
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  // Máy chủ không biết theme của khách, nên lần render đầu phải trung tính;
-  // vẽ icon ngay từ server sẽ lệch hydration khi khách đang ở dark mode.
-  useEffect(() => setMounted(true), []);
-
-  const dark = resolvedTheme === "dark";
 
   return (
     <Button
       variant="ghost"
       size="icon"
-      aria-label={dark ? "Chuyển sang nền sáng" : "Chuyển sang nền tối"}
-      onClick={() => setTheme(dark ? "light" : "dark")}
+      aria-label="Đổi nền sáng/tối"
+      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
     >
-      {mounted ? dark ? <Sun /> : <Moon /> : <span className="size-4" />}
+      {/* Hiện icon bằng CSS theo class .dark thay vì state: next-themes đặt
+          class đó trước khi trang vẽ, nên không lệch hydration và cũng không
+          cần useEffect chỉ để biết đã mounted hay chưa. */}
+      <Moon className="dark:hidden" />
+      <Sun className="hidden dark:block" />
     </Button>
   );
 }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { SiteEvent } from "@/data/events";
-import { CAROUSEL_RATIO, carouselPhotos, getPhotos } from "./photos";
+import { CAROUSEL_RATIO, GALLERY_EFFECTS, carouselPhotos, getPhotos, withGalleryEffects } from "./photos";
 
 function event(
   overrides?: SiteEvent["gallery"]["overrides"],
@@ -96,5 +96,48 @@ describe("carouselPhotos", () => {
 
   it("không bao giờ trả mảng rỗng nếu đầu vào có ảnh", () => {
     expect(carouselPhotos(getPhotos(event())).length).toBeGreaterThan(0);
+  });
+});
+
+describe("withGalleryEffects", () => {
+  // Giống events.ts thật: ảnh mặc định không có hiệu ứng, gallery mới rải vào.
+  const base = () =>
+    getPhotos({
+      ...event(),
+      gallery: { ...event().gallery, defaultEffect: "none" },
+    });
+
+  it("chỉ một phần ảnh có hiệu ứng, số còn lại để nguyên", () => {
+    const photos = withGalleryEffects(base());
+    const shaded = photos.filter((p) => p.effect !== "none");
+    expect(shaded.length).toBeGreaterThan(0);
+    expect(shaded.length).toBeLessThan(photos.length / 2);
+  });
+
+  it("không vượt trần WebGL: tối đa 12 ảnh có shader", () => {
+    // Chrome ~16 context/trang, iOS Safari ít hơn. Cộng thêm 1 canvas nền.
+    const shaded = withGalleryEffects(base()).filter((p) => p.effect !== "none");
+    expect(shaded.length).toBeLessThanOrEqual(12);
+  });
+
+  it("xoay vòng qua đủ các hiệu ứng thay vì lặp một loại", () => {
+    const used = new Set(
+      withGalleryEffects(base()).filter((p) => p.effect !== "none").map((p) => p.effect),
+    );
+    expect(used.size).toBeGreaterThanOrEqual(Math.min(7, GALLERY_EFFECTS.length));
+  });
+
+  it("giữ nguyên số lượng và thứ tự ảnh", () => {
+    const before = base();
+    const after = withGalleryEffects(before);
+    expect(after.map((p) => p.id)).toEqual(before.map((p) => p.id));
+  });
+
+  it("không đè lên hiệu ứng đã chỉ định thủ công trong overrides", () => {
+    const withOverride = event({ DSC05289: { effect: "water" } });
+    const photos = withGalleryEffects(
+      getPhotos({ ...withOverride, gallery: { ...withOverride.gallery, defaultEffect: "none" } }),
+    );
+    expect(photos.find((p) => p.id === "DSC05289")?.effect).toBe("water");
   });
 });

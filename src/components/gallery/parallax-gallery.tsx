@@ -14,6 +14,7 @@ import { cn } from "cn";
 import { useMedia } from "@/hooks/use-media";
 import type { Photo } from "@/lib/photos";
 import { PhotoImage } from "./photo-image";
+import { ShaderPhoto } from "./shader-photo";
 
 /** Mỗi cột trôi một quãng khác nhau thì mới thấy được độ lệch. */
 const COLUMN_SHIFT = [-140, 90, -60];
@@ -72,11 +73,19 @@ export function ParallaxGallery({
               key={photo.id}
               className="overflow-hidden rounded-2xl shadow-lg ring-1 ring-border/40"
             >
-              <PhotoImage
-                photo={photo}
-                sizes="(max-width: 768px) 50vw, 33vw"
-                className="transition-transform duration-700 hover:scale-[1.03]"
-              />
+              {photo.effect === "none" ? (
+                <PhotoImage
+                  photo={photo}
+                  sizes="(max-width: 768px) 50vw, 33vw"
+                  className="transition-transform duration-700 hover:scale-[1.03]"
+                />
+              ) : (
+                // Shader vẽ ra canvas không có kích thước nội tại, nên phải
+                // đặt sẵn tỉ lệ của chính ảnh đó, nếu không ô sẽ sập về 0.
+                <div style={{ aspectRatio: `${photo.width} / ${photo.height}` }}>
+                  <ShaderPhoto photo={photo} effect={photo.effect} />
+                </div>
+              )}
               {photo.caption ? (
                 <figcaption className="bg-card/70 px-3 py-2 font-sans text-xs text-muted-foreground backdrop-blur">
                   {photo.caption}

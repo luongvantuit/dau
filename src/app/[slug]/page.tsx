@@ -8,7 +8,7 @@ import { AnimatedGroup } from "@/components/ui/motion-primitives/animated-group"
 import { TextEffect } from "@/components/ui/motion-primitives/text-effect";
 import { formatDateVi } from "@/lib/dates";
 import { getAllEvents, getEvent, getEventAge } from "@/lib/events";
-import { carouselPhotos, getPhotos } from "@/lib/photos";
+import { carouselPhotos, getPhotos, withGalleryEffects } from "@/lib/photos";
 
 export function generateStaticParams() {
   return getAllEvents().map((event) => ({ slug: event.slug }));
@@ -33,6 +33,8 @@ export default async function EventPage({ params }: PageProps<"/[slug]">) {
   const photos = getPhotos(event);
   // Khung xoay là khổ dọc cố định nên chỉ nhận ảnh hợp tỉ lệ.
   const stack = carouselPhotos(photos);
+  // Rải shader xen kẽ, có giới hạn số WebGL context.
+  const gallery = withGalleryEffects(photos);
   const age = getEventAge(event);
 
   return (
@@ -75,7 +77,7 @@ export default async function EventPage({ params }: PageProps<"/[slug]">) {
           <h2 className="px-6 text-center text-2xl font-bold md:text-3xl">
             {photos.length} khoảnh khắc
           </h2>
-          <ParallaxGallery photos={photos} />
+          <ParallaxGallery photos={gallery} />
         </section>
 
         {event.note ? (
