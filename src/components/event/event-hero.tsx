@@ -1,11 +1,18 @@
+import { LogoMark } from "@/components/site/logo";
 import { AnimatedGroup } from "@/components/ui/motion-primitives/animated-group";
 import { TextEffect } from "@/components/ui/motion-primitives/text-effect";
 import type { SiteEvent } from "@/data/events";
 import { formatDateVi } from "@/lib/dates";
 import { getEventAge } from "@/lib/events";
 
-export function EventHero({ event }: { event: SiteEvent }) {
+export function EventHero({ event, photoCount }: { event: SiteEvent; photoCount: number }) {
   const age = getEventAge(event);
+
+  const stats = [
+    { label: "Ngày", value: formatDateVi(event.date) },
+    { label: "Tuổi", value: age > 0 ? `${age} tuổi` : "Chào đời" },
+    { label: "Ảnh", value: `${photoCount}` },
+  ];
 
   return (
     <AnimatedGroup
@@ -13,9 +20,7 @@ export function EventHero({ event }: { event: SiteEvent }) {
       preset="blur-slide"
       className="flex flex-col items-center gap-3 px-5 text-center"
     >
-      <p className="font-sans text-xs tracking-wide text-muted-foreground uppercase sm:text-sm">
-        {formatDateVi(event.date)}
-      </p>
+      <LogoMark className="size-10 drop-shadow-sm md:size-12" />
       {/* Cỡ chữ bắt đầu từ mức đọc được trên điện thoại rồi mới nở ra: đặt
           text-7xl ngay từ breakpoint nhỏ nhất thì tiêu đề tràn khỏi màn 390px. */}
       <TextEffect
@@ -30,9 +35,16 @@ export function EventHero({ event }: { event: SiteEvent }) {
       {event.tagline ? (
         <p className="font-sans text-base text-muted-foreground sm:text-lg">{event.tagline}</p>
       ) : null}
-      <p className="rounded-full bg-card/70 px-4 py-1 font-sans text-sm font-medium backdrop-blur">
-        {age > 0 ? `${age} tuổi` : "Chào đời"}
-      </p>
+      <dl className="mt-2 grid w-full max-w-md grid-cols-3 gap-px overflow-hidden rounded-2xl border border-border/50 bg-border/50 text-center">
+        {stats.map((stat) => (
+          <div key={stat.label} className="flex flex-col gap-0.5 bg-card/70 px-2 py-3 backdrop-blur">
+            <dt className="font-sans text-[0.65rem] tracking-wide text-muted-foreground uppercase">
+              {stat.label}
+            </dt>
+            <dd className="font-sans text-sm font-semibold sm:text-base">{stat.value}</dd>
+          </div>
+        ))}
+      </dl>
     </AnimatedGroup>
   );
 }

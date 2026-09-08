@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { LogoMark } from "@/components/site/logo";
+
 import { SITE } from "@/data/site";
 import { getAllEvents } from "@/lib/events";
 
@@ -9,8 +11,9 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-border/50 bg-background/70 backdrop-blur-xl">
       <nav className="mx-auto flex h-14 w-full max-w-7xl items-center gap-6 px-5">
-        <Link href="/" className="text-xl font-extrabold tracking-tight">
-          {SITE.name}
+        <Link href="/" className="flex shrink-0 items-center gap-2">
+          <LogoMark className="size-7" />
+          <span className="text-xl font-extrabold tracking-tight">{SITE.name}</span>
         </Link>
 
         <div className="flex flex-1 items-center gap-1 overflow-x-auto">

@@ -58,7 +58,7 @@ export function EventTimeline({ events }: { events: SiteEvent[] }) {
                   >
                     {formatDateVi(event.date)}
                   </time>
-                  <h2 className="text-lg leading-tight font-bold sm:text-2xl">{event.title}</h2>
+                  <h3 className="text-lg leading-tight font-bold sm:text-2xl">{event.title}</h3>
                   {event.tagline ? (
                     <p className="font-sans text-xs text-muted-foreground sm:text-sm">
                       {event.tagline}

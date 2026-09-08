@@ -1,38 +1,76 @@
 import { EventTimeline } from "@/components/event/event-timeline";
+import { LogoMark } from "@/components/site/logo";
+import { SectionHeading } from "@/components/site/section-heading";
 import { BackgroundMesh } from "@/components/shaders/background-mesh";
 import { AnimatedGroup } from "@/components/ui/motion-primitives/animated-group";
 import { TextEffect } from "@/components/ui/motion-primitives/text-effect";
 import { SITE } from "@/data/site";
+import { formatDateVi } from "@/lib/dates";
 import { getAllEvents } from "@/lib/events";
+import { getPhotos } from "@/lib/photos";
+
+const FALLBACK_PALETTE = ["#dce6f2", "#f5e0cd", "#cdd9e8", "#fff6ec"] as const;
 
 export default function Home() {
   const events = getAllEvents();
-  const palette = events[0]?.palette ?? ["#ffd9e8", "#fff4d6", "#d9ecff", "#f0dcff"];
+  const palette = events[0]?.palette ?? FALLBACK_PALETTE;
+  const photoCount = events.reduce((total, event) => total + getPhotos(event).length, 0);
+
+  // Số liệu tĩnh, suy ra từ registry lúc build. Không tính "hiện đang mấy
+  // tháng tuổi" vì trang là static export, con số đó sẽ cũ dần sau mỗi ngày.
+  const stats = [
+    { label: "Ngày sinh", value: formatDateVi(SITE.birthDate) },
+    { label: "Cột mốc", value: `${events.length}` },
+    { label: "Khoảnh khắc", value: `${photoCount}` },
+  ];
 
   return (
     <>
       <BackgroundMesh palette={palette} />
-      <main className="flex flex-1 flex-col gap-10 py-12 md:gap-16 md:py-20">
+
+      <main className="flex flex-1 flex-col gap-16 py-12 md:gap-24 md:py-20">
         <AnimatedGroup
           as="header"
           preset="blur-slide"
-          className="mx-auto flex max-w-3xl flex-col items-center gap-3 px-5 text-center"
+          className="mx-auto flex max-w-3xl flex-col items-center gap-5 px-5 text-center"
         >
-          <TextEffect
-            as="h1"
-            per="char"
-            preset="fade-in-blur"
-            speedSegment={1.6}
-            className="text-5xl font-extrabold sm:text-7xl md:text-8xl"
-          >
-            {SITE.name}
-          </TextEffect>
-          <p className="font-sans text-base text-muted-foreground sm:text-lg">{SITE.fullName}</p>
-          <p className="max-w-prose font-sans text-base text-muted-foreground">
+          <LogoMark className="size-14 drop-shadow-sm md:size-16" />
+
+          <div className="flex flex-col items-center gap-2">
+            <TextEffect
+              as="h1"
+              per="char"
+              preset="fade-in-blur"
+              speedSegment={1.6}
+              className="text-5xl font-extrabold sm:text-7xl md:text-8xl"
+            >
+              {SITE.name}
+            </TextEffect>
+            <p className="font-sans text-base tracking-wide text-muted-foreground sm:text-lg">
+              {SITE.fullName}
+            </p>
+          </div>
+
+          <p className="max-w-prose font-sans text-sm text-muted-foreground sm:text-base">
             {SITE.description}
           </p>
+
+          <dl className="mt-2 grid w-full max-w-md grid-cols-3 gap-px overflow-hidden rounded-2xl border border-border/50 bg-border/50 text-center">
+            {stats.map((stat) => (
+              <div key={stat.label} className="flex flex-col gap-0.5 bg-card/70 px-2 py-3 backdrop-blur">
+                <dt className="font-sans text-[0.65rem] tracking-wide text-muted-foreground uppercase">
+                  {stat.label}
+                </dt>
+                <dd className="font-sans text-sm font-semibold sm:text-base">{stat.value}</dd>
+              </div>
+            ))}
+          </dl>
         </AnimatedGroup>
-        <EventTimeline events={events} />
+
+        <section className="flex flex-col gap-8">
+          <SectionHeading hint="Bấm vào từng mốc để xem ảnh">Các cột mốc</SectionHeading>
+          <EventTimeline events={events} />
+        </section>
       </main>
     </>
   );
