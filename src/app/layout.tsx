@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { SITE } from "@/data/site";
 import { MotionProvider } from "@/providers/motion-provider";
+import { ThemeProvider } from "@/providers/theme-provider";
 
 import "./globals.css";
 
@@ -37,14 +38,22 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="vi"
       className={`${display.variable} ${sans.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
-        <MotionProvider>
-          <SiteHeader />
-          {children}
-          <SiteFooter />
-          <MusicButton />
-        </MotionProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <MotionProvider>
+            <SiteHeader />
+            {children}
+            <SiteFooter />
+            <MusicButton />
+          </MotionProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

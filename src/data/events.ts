@@ -59,7 +59,7 @@ export const EVENTS: SiteEvent[] = [
     tagline: "Một vòng mặt trời đầu tiên",
     description:
       "Đậu tròn một tuổi. Những bước đi đầu, tiếng cười đầu, và một ngày đầy bóng bay.",
-    palette: ["#dce6f2", "#f5e0cd", "#cdd9e8", "#fff6ec"],
+    palette: ["#a8c6e8", "#f0c49a", "#8fb4dd", "#ffe9c9"],
     gallery: {
       layout: "carousel-3d",
       // Ảnh để nguyên. Shader chỉ dùng ở nền phía sau — phủ lên ảnh thì

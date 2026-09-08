@@ -5,11 +5,11 @@ import { BackgroundMesh } from "@/components/shaders/background-mesh";
 import { AnimatedGroup } from "@/components/ui/motion-primitives/animated-group";
 import { TextEffect } from "@/components/ui/motion-primitives/text-effect";
 import { SITE } from "@/data/site";
-import { formatDateVi } from "@/lib/dates";
+import { formatDateNumeric } from "@/lib/dates";
 import { getAllEvents } from "@/lib/events";
 import { getPhotos } from "@/lib/photos";
 
-const FALLBACK_PALETTE = ["#dce6f2", "#f5e0cd", "#cdd9e8", "#fff6ec"] as const;
+const FALLBACK_PALETTE = ["#a8c6e8", "#f0c49a", "#8fb4dd", "#ffe9c9"] as const;
 
 export default function Home() {
   const events = getAllEvents();
@@ -19,7 +19,7 @@ export default function Home() {
   // Số liệu tĩnh, suy ra từ registry lúc build. Không tính "hiện đang mấy
   // tháng tuổi" vì trang là static export, con số đó sẽ cũ dần sau mỗi ngày.
   const stats = [
-    { label: "Ngày sinh", value: formatDateVi(SITE.birthDate) },
+    { label: "Ngày sinh", value: formatDateNumeric(SITE.birthDate) },
     { label: "Cột mốc", value: `${events.length}` },
     { label: "Khoảnh khắc", value: `${photoCount}` },
   ];
@@ -55,13 +55,16 @@ export default function Home() {
             {SITE.description}
           </p>
 
-          <dl className="mt-2 grid w-full max-w-md grid-cols-3 gap-px overflow-hidden rounded-2xl border border-border/50 bg-border/50 text-center">
+          <dl className="mt-3 grid w-full max-w-md grid-cols-3 gap-px overflow-hidden rounded-2xl border border-border/50 bg-border/50 text-center shadow-sm">
             {stats.map((stat) => (
-              <div key={stat.label} className="flex flex-col gap-0.5 bg-card/70 px-2 py-3 backdrop-blur">
-                <dt className="font-sans text-[0.65rem] tracking-wide text-muted-foreground uppercase">
+              <div
+                key={stat.label}
+                className="flex flex-col items-center justify-center gap-1.5 bg-card/70 px-3 py-5 backdrop-blur sm:px-4"
+              >
+                <dt className="font-sans text-[0.65rem] tracking-[0.12em] text-muted-foreground uppercase">
                   {stat.label}
                 </dt>
-                <dd className="font-sans text-sm font-semibold sm:text-base">{stat.value}</dd>
+                <dd className="font-sans text-sm font-semibold tabular-nums sm:text-base">{stat.value}</dd>
               </div>
             ))}
           </dl>

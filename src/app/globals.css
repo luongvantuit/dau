@@ -54,8 +54,6 @@
 }
 
 :root {
-  /* Trang chỉ có nền sáng; báo cho trình duyệt để thanh cuộn và các control
-     mặc định vẽ theo tông sáng. */
   color-scheme: light;
 
 --background: oklch(0.982 0.008 250);
@@ -92,6 +90,42 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
+
+.dark {
+  color-scheme: dark;
+
+  --background: oklch(0.205 0.032 255);
+  --foreground: oklch(0.945 0.014 250);
+  --card: oklch(0.262 0.038 255);
+  --card-foreground: oklch(0.945 0.014 250);
+  --popover: oklch(0.262 0.038 255);
+  --popover-foreground: oklch(0.945 0.014 250);
+  --primary: oklch(0.755 0.125 55);
+  --primary-foreground: oklch(0.225 0.05 55);
+  --secondary: oklch(0.315 0.042 255);
+  --secondary-foreground: oklch(0.93 0.02 250);
+  --muted: oklch(0.285 0.034 255);
+  --muted-foreground: oklch(0.735 0.03 250);
+  --accent: oklch(0.335 0.055 60);
+  --accent-foreground: oklch(0.93 0.03 60);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: oklch(0.755 0.125 55);
+  --chart-1: oklch(0.755 0.125 55);
+  --chart-2: oklch(0.66 0.09 250);
+  --chart-3: oklch(0.55 0.07 250);
+  --chart-4: oklch(0.44 0.055 255);
+  --chart-5: oklch(0.34 0.045 255);
+  --sidebar: oklch(0.262 0.038 255);
+  --sidebar-foreground: oklch(0.945 0.014 250);
+  --sidebar-primary: oklch(0.755 0.125 55);
+  --sidebar-primary-foreground: oklch(0.225 0.05 55);
+  --sidebar-accent: oklch(0.315 0.042 255);
+  --sidebar-accent-foreground: oklch(0.93 0.02 250);
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: oklch(0.755 0.125 55);
+}
 
 @layer base {
   * {

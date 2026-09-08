@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ageInYears, formatDateVi } from "./dates";
+import { ageInYears, formatDateNumeric, formatDateVi } from "./dates";
 
 describe("ageInYears", () => {
   it("tròn 1 tuổi đúng ngày sinh nhật", () => {
@@ -32,5 +32,12 @@ describe("formatDateVi", () => {
   it("bỏ số 0 thừa ở ngày và tháng", () => {
     expect(formatDateVi("2026-09-17")).toBe("17 tháng 9, 2026");
     expect(formatDateVi("2026-01-05")).toBe("5 tháng 1, 2026");
+  });
+});
+
+describe("formatDateNumeric", () => {
+  it("giữ số 0 đứng đầu để mọi ngày cùng độ dài, không bị xuống dòng", () => {
+    expect(formatDateNumeric("2026-09-17")).toBe("17.09.2026");
+    expect(formatDateNumeric("2026-01-05")).toBe("05.01.2026");
   });
 });
