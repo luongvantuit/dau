@@ -1,9 +1,10 @@
 "use client";
 
-import { Music, Square } from "lucide-react";
+import { Square } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { AudioLinesIcon } from "@/components/ui/audio-lines";
 import { playHappyBirthday } from "@/lib/happy-birthday";
 
 export function MusicButton() {
@@ -43,7 +44,7 @@ export function MusicButton() {
       aria-pressed={playing}
       className="fixed right-4 bottom-4 z-50 size-12 rounded-full p-0 shadow-lg md:right-6 md:bottom-6"
     >
-      {playing ? <Square className="fill-current" /> : <Music />}
+      {playing ? <Square className="fill-current" /> : <AudioLinesIcon size={20} />}
     </Button>
   );
 }

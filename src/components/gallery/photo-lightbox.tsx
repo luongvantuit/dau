@@ -1,10 +1,13 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useCallback, useEffect } from "react";
 
+import { DotNav } from "@/components/gallery/dot-nav";
 import { PhotoImage } from "@/components/gallery/photo-image";
+import { ChevronLeftIcon } from "@/components/ui/chevron-left";
+import { ChevronRightIcon } from "@/components/ui/chevron-right";
+import { XIcon } from "@/components/ui/x";
 import type { Photo } from "@/lib/photos";
 
 export function PhotoLightbox({
@@ -100,13 +103,13 @@ export function PhotoLightbox({
             onClick={(event) => event.stopPropagation()}
           >
             <button onClick={() => step(-1)} aria-label="Ảnh trước" className="p-2 opacity-80 hover:opacity-100">
-              <ChevronLeft />
+              <ChevronLeftIcon size={22} />
             </button>
-            <span className="font-sans text-sm tabular-nums">
-              {index! + 1} / {photos.length}
-            </span>
+            {/* Dot thay cho "3 / 28" cho khớp với carousel: con số đếm thô
+                không nói được đang ở đoạn nào của cả tập ảnh. */}
+            <DotNav count={photos.length} index={index!} onSelect={onChange} tone="inverse" />
             <button onClick={() => step(1)} aria-label="Ảnh sau" className="p-2 opacity-80 hover:opacity-100">
-              <ChevronRight />
+              <ChevronRightIcon size={22} />
             </button>
           </div>
 
@@ -115,7 +118,7 @@ export function PhotoLightbox({
             aria-label="Đóng"
             className="absolute top-4 right-4 p-2 text-background opacity-80 hover:opacity-100"
           >
-            <X />
+            <XIcon size={22} />
           </button>
         </motion.div>
       ) : null}

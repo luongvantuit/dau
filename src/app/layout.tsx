@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Baloo_2, Be_Vietnam_Pro } from "next/font/google";
 
-import { MusicButton } from "@/components/site/music-button";
+import { GlassScrollbar } from "@/components/site/glass-scrollbar";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
+import { SiteBackground } from "@/components/shaders/site-background";
 import { SITE } from "@/data/site";
+import { getAllEvents } from "@/lib/events";
 import { MotionProvider } from "@/providers/motion-provider";
 import { ThemeProvider } from "@/providers/theme-provider";
 
@@ -25,8 +27,10 @@ const sans = Be_Vietnam_Pro({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: `${SITE.name} · ${SITE.fullName}`,
-    template: `%s · ${SITE.name}`,
+    // Không dùng dấu ngăn gõ tay: thẻ <title> chỉ nhận chữ nên không vẽ được
+    // chấm thật, mà ghép bằng lời thì đọc tự nhiên hơn hẳn.
+    default: `${SITE.name}, ${SITE.fullName}`,
+    template: `%s của ${SITE.name}`,
   },
   description: SITE.description,
   openGraph: { type: "website", locale: "vi_VN", siteName: SITE.name },
@@ -48,10 +52,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           disableTransitionOnChange
         >
           <MotionProvider>
-            <SiteHeader />
+            {/* Ngoài template.tsx: xem ghi chú trong SiteBackground. */}
+            <SiteBackground />
+            <SiteHeader events={getAllEvents()} />
             {children}
-            <SiteFooter />
-            <MusicButton />
+            <SiteFooter events={getAllEvents()} />
+            <GlassScrollbar />
           </MotionProvider>
         </ThemeProvider>
       </body>

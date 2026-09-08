@@ -28,6 +28,9 @@ export function PhotoImage({
       loading={priority ? "eager" : "lazy"}
       fetchPriority={priority ? "high" : "auto"}
       decoding="async"
+      // Ảnh mặc định kéo-thả được; trình duyệt sẽ cướp chuỗi pointer để chạy
+      // drag-and-drop của nó và carousel không nhận được thao tác kéo nữa.
+      draggable={false}
       // Ảnh mờ 16px làm nền trong lúc ảnh thật tải, hết giật khung trắng.
       style={{
         backgroundImage: `url("${photo.blurDataURL}")`,

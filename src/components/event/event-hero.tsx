@@ -35,11 +35,11 @@ export function EventHero({ event, photoCount }: { event: SiteEvent; photoCount:
       {event.tagline ? (
         <p className="font-sans text-base text-muted-foreground sm:text-lg">{event.tagline}</p>
       ) : null}
-      <dl className="mt-3 grid w-full max-w-md grid-cols-3 gap-px overflow-hidden rounded-2xl border border-border/50 bg-border/50 text-center shadow-sm">
+      <dl className="mt-3 grid w-full max-w-md grid-cols-3 gap-px overflow-hidden rounded-2xl border border-border/50 bg-border/50 text-center shadow-sm dark:border-white/10 dark:bg-white/10">
         {stats.map((stat) => (
           <div
                 key={stat.label}
-                className="flex flex-col items-center justify-center gap-1.5 bg-card/70 px-3 py-5 backdrop-blur sm:px-4"
+                className="flex flex-col items-center justify-center gap-1.5 bg-card/70 px-3 py-5 backdrop-blur sm:px-4 dark:bg-card/85"
               >
             <dt className="font-sans text-[0.65rem] tracking-[0.12em] text-muted-foreground uppercase">
               {stat.label}

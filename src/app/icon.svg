@@ -1,22 +1,30 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
   <title>Đậu</title>
+  <!-- Giữ khớp với src/components/site/logo.tsx. Lối Fluent: tile gradient ấm,
+       vệt gloss chéo, hạt đậu trắng xếp lớp lên trên. Dải màu chỉ đi trong
+       tông ấm: thêm stop navy vào chính dải này là ra nâu olive đục. -->
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <!-- Đậm hơn bảng màu pastel của trang: ở 16px trên thanh tab nền trắng,
-           màu quá nhạt sẽ biến mất hoàn toàn. -->
-      <stop offset="0" stop-color="#eda05c"/>
-      <stop offset="0.5" stop-color="#d98a5e"/>
-      <stop offset="1" stop-color="#3f6ea8"/>
+    <linearGradient id="tile" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffc978"/>
+      <stop offset="0.55" stop-color="#ef8f3c"/>
+      <stop offset="1" stop-color="#d1512c"/>
     </linearGradient>
-    <!-- Khoét một hình tròn ra khỏi hình bầu dục để tạo vết lõm của hạt đậu.
-         Khối đặc đọc rõ hơn hẳn ở 16px so với nét vẽ mảnh. -->
-    <mask id="bean">
+    <linearGradient id="bean" x1="0.15" y1="0" x2="0.9" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#fff1de"/>
+    </linearGradient>
+    <linearGradient id="gloss" x1="0" y1="0" x2="0.65" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <mask id="cut">
       <rect width="32" height="32" fill="black"/>
       <ellipse cx="16.4" cy="15.8" rx="8.3" ry="11"
                transform="rotate(-38 16.4 15.8)" fill="white"/>
       <circle cx="6.2" cy="23.2" r="5.9" fill="black"/>
     </mask>
   </defs>
-  <rect width="32" height="32" rx="8" fill="url(#bg)"/>
-  <rect width="32" height="32" fill="#fff" mask="url(#bean)"/>
+  <rect width="32" height="32" rx="9" fill="url(#tile)"/>
+  <path d="M0 9a9 9 0 0 1 9-9h13L0 22Z" fill="url(#gloss)"/>
+  <rect width="32" height="32" fill="url(#bean)" mask="url(#cut)"/>
 </svg>

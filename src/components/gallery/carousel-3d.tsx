@@ -1,12 +1,14 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { ChevronLeftIcon } from "@/components/ui/chevron-left";
+import { ChevronRightIcon } from "@/components/ui/chevron-right";
 import { useMedia } from "@/hooks/use-media";
 import type { Photo } from "@/lib/photos";
+import { DotNav } from "./dot-nav";
 import { PhotoImage } from "./photo-image";
 import { ShaderPhoto } from "./shader-photo";
 
@@ -15,14 +17,39 @@ export function Carousel3D({ photos }: { photos: Photo[] }) {
   // Màn hẹp chỉ đủ chỗ cho một ảnh mỗi bên; nhồi bốn ảnh thì chúng chồng lên
   // ảnh giữa. Trước đây tôi ẩn hẳn nên trên điện thoại mất luôn hiệu ứng xoè.
   const wide = useMedia("(min-width: 768px)");
+  const dragStart = useRef<{ x: number; at: number } | null>(null);
   const offsets = wide ? [-2, -1, 1, 2] : [-1, 1];
   const active = photos[index];
+
   const move = (step: number) =>
     setIndex((current) => (current + step + photos.length) % photos.length);
 
   return (
     <div className="flex flex-col items-center gap-6">
-      <div className="relative flex w-full items-center justify-center [perspective:1400px]">
+      {/* Vuốt bằng pointer event chứ không dùng prop drag của motion: khi
+          người dùng bật giảm chuyển động, MotionConfig tắt các tính năng dựa
+          trên transform và drag ngừng hoạt động — họ sẽ không vuốt được nữa.
+          Pointer event thì luôn chạy. */}
+      <div
+        className="relative flex w-full touch-pan-y cursor-grab items-center justify-center [perspective:1400px] active:cursor-grabbing"
+        onPointerDown={(event) => {
+          dragStart.current = { x: event.clientX, at: event.timeStamp };
+          event.currentTarget.setPointerCapture(event.pointerId);
+        }}
+        onPointerUp={(event) => {
+          const start = dragStart.current;
+          dragStart.current = null;
+          if (!start) return;
+          const dx = event.clientX - start.x;
+          const elapsed = Math.max(event.timeStamp - start.at, 1);
+          // Ngưỡng kép: kéo đủ xa, hoặc hất nhanh dù quãng ngắn.
+          if (Math.abs(dx) < 60 && Math.abs(dx) / elapsed < 0.45) return;
+          move(dx < 0 ? 1 : -1);
+        }}
+        onPointerCancel={() => {
+          dragStart.current = null;
+        }}
+      >
         {/* Ảnh hai bên: chỉ là <img> xoay bằng CSS, không tốn WebGL context. */}
         {offsets.map((offset) => {
           const neighbour = photos[(index + offset + photos.length) % photos.length];
@@ -40,7 +67,11 @@ export function Carousel3D({ photos }: { photos: Photo[] }) {
               }}
               transition={{ type: "spring", stiffness: 220, damping: 30 }}
             >
-              <PhotoImage photo={neighbour} sizes="320px" className="h-full object-cover" />
+              <PhotoImage
+                photo={neighbour}
+                sizes="320px"
+                className="h-full object-cover select-none"
+              />
             </motion.div>
           );
         })}
@@ -54,15 +85,17 @@ export function Carousel3D({ photos }: { photos: Photo[] }) {
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         <Button variant="outline" size="icon" onClick={() => move(-1)} aria-label="Ảnh trước">
-          <ChevronLeft />
+          <ChevronLeftIcon size={18} />
         </Button>
-        <p className="font-sans text-sm tabular-nums text-muted-foreground">
-          {index + 1} / {photos.length}
-        </p>
+
+        {/* Dot thay cho "4 / 27": con số đó đếm riêng ảnh hợp khổ dọc nên lệch
+            với số ảnh dưới gallery, nhìn vào tưởng thiếu ảnh. */}
+        <DotNav count={photos.length} index={index} onSelect={setIndex} />
+
         <Button variant="outline" size="icon" onClick={() => move(1)} aria-label="Ảnh sau">
-          <ChevronRight />
+          <ChevronRightIcon size={18} />
         </Button>
       </div>
 

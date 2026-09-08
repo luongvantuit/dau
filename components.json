@@ -23,6 +23,7 @@
   "menuAccent": "subtle",
   "registries": {
     "@tailark-oss": "https://oss.tailark.com/r/{name}.json",
-    "@aceternity": "https://ui.aceternity.com/registry/{name}.json"
+    "@aceternity": "https://ui.aceternity.com/registry/{name}.json",
+    "@pqoqubbw": "https://icons.pqoqubbw.dev/r/{name}.json"
   }
 }

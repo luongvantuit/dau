@@ -62,8 +62,8 @@ describe("getPhotos", () => {
 
   it("đánh số alt liên tục sau khi lọc, không để lại lỗ hổng", () => {
     const photos = getPhotos(event(undefined, ["DSC05289"]));
-    expect(photos[0].alt).toContain("ảnh 1");
-    expect(photos.at(-1)?.alt).toContain(`ảnh ${photos.length}`);
+    expect(photos[0].alt).toContain("Ảnh 1");
+    expect(photos.at(-1)?.alt).toContain(`Ảnh ${photos.length}`);
   });
 
   it("báo lỗi khi exclude trỏ tới ảnh không tồn tại", () => {

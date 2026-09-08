@@ -66,8 +66,30 @@ export default async function Image() {
             flex: 1,
           }}
         >
-          <div style={{ display: "flex", fontSize: 30, letterSpacing: 4, opacity: 0.75 }}>
-            {`${SITE.name} · ${SITE.fullName}`}
+          {/* Dấu ngăn vẽ bằng khối tròn thay cho ký tự gõ tay. Satori đòi mọi
+              div nhiều con phải khai báo display: flex tường minh. */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 14,
+              fontSize: 30,
+              letterSpacing: 4,
+              opacity: 0.75,
+            }}
+          >
+            <div style={{ display: "flex" }}>{SITE.name}</div>
+            <div
+              style={{
+                display: "flex",
+                width: 7,
+                height: 7,
+                borderRadius: 4,
+                background: "#1c3049",
+                opacity: 0.5,
+              }}
+            />
+            <div style={{ display: "flex" }}>{SITE.fullName}</div>
           </div>
 
           <div style={{ display: "flex", fontSize: 96, fontFamily: "Baloo 2", lineHeight: 1.15, marginTop: 6 }}>
@@ -81,7 +103,7 @@ export default async function Image() {
           <div style={{ display: "flex", alignItems: "center", gap: 20, marginTop: 30 }}>
             <div style={{ width: 90, height: 5, borderRadius: 3, background: "#e08a4c" }} />
             <div style={{ display: "flex", fontSize: 30, opacity: 0.8 }}>{formatDateNumeric(event.date)}</div>
-            <div style={{ display: "flex", fontSize: 30, opacity: 0.45 }}>·</div>
+            <div style={{ display: "flex", width: 7, height: 7, borderRadius: 4, background: "#1c3049", opacity: 0.35 }} />
             <div style={{ display: "flex", fontSize: 30, opacity: 0.8 }}>{`${photoCount} khoảnh khắc`}</div>
           </div>
         </div>

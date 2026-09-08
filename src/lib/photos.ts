@@ -53,7 +53,7 @@ export function getPhotos(event: SiteEvent): Photo[] {
       ...photo,
       srcSet,
       src: (srcSet.find((item) => item.w === 800) ?? srcSet[srcSet.length - 1]).src,
-      alt: override.alt ?? `${event.title} — ảnh ${index + 1}`,
+      alt: override.alt ?? `${event.title}, Ảnh ${index + 1}`,
       caption: override.caption,
       effect: override.effect ?? defaultEffect,
       tilt: override.tilt ?? TILTS[index % TILTS.length],

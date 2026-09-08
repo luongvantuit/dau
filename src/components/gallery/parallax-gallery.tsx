@@ -14,6 +14,7 @@ import { cn } from "cn";
 import { useMedia } from "@/hooks/use-media";
 import type { Photo } from "@/lib/photos";
 import { PhotoImage } from "./photo-image";
+import { Reveal } from "@/components/motion/reveal";
 import { PhotoLightbox } from "./photo-lightbox";
 
 /** Mỗi cột trôi một quãng khác nhau thì mới thấy được độ lệch. */
@@ -69,10 +70,15 @@ export function ParallaxGallery({
           style={{ y: y[columnIndex] }}
           className="grid gap-3 md:gap-5"
         >
-          {column.map((photo) => (
-            <figure
+          {column.map((photo, photoIndex) => (
+            <Reveal
               key={photo.id}
-              className="overflow-hidden rounded-2xl shadow-lg ring-1 ring-border/40"
+              // Lệch nhẹ theo vị trí trong cột để ảnh hiện lần lượt chứ không
+              // bật lên cùng lúc cả cột.
+              delay={(photoIndex % 4) * 0.14}
+            >
+            <figure
+              className="overflow-hidden rounded-2xl shadow-lg ring-1 ring-border/40 dark:ring-white/10"
             >
               <button
                 type="button"
@@ -94,6 +100,7 @@ export function ParallaxGallery({
                 </figcaption>
               ) : null}
             </figure>
+            </Reveal>
           ))}
         </motion.div>
       ))}

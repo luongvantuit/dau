@@ -1,7 +1,6 @@
 import { EventTimeline } from "@/components/event/event-timeline";
 import { LogoMark } from "@/components/site/logo";
 import { SectionHeading } from "@/components/site/section-heading";
-import { BackgroundMesh } from "@/components/shaders/background-mesh";
 import { AnimatedGroup } from "@/components/ui/motion-primitives/animated-group";
 import { TextEffect } from "@/components/ui/motion-primitives/text-effect";
 import { SITE } from "@/data/site";
@@ -9,11 +8,9 @@ import { formatDateNumeric } from "@/lib/dates";
 import { getAllEvents } from "@/lib/events";
 import { getPhotos } from "@/lib/photos";
 
-const FALLBACK_PALETTE = ["#a8c6e8", "#f0c49a", "#8fb4dd", "#ffe9c9"] as const;
 
 export default function Home() {
   const events = getAllEvents();
-  const palette = events[0]?.palette ?? FALLBACK_PALETTE;
   const photoCount = events.reduce((total, event) => total + getPhotos(event).length, 0);
 
   // Số liệu tĩnh, suy ra từ registry lúc build. Không tính "hiện đang mấy
@@ -26,8 +23,6 @@ export default function Home() {
 
   return (
     <>
-      <BackgroundMesh palette={palette} />
-
       <main className="flex flex-1 flex-col gap-16 py-12 md:gap-24 md:py-20">
         <AnimatedGroup
           as="header"
@@ -55,11 +50,11 @@ export default function Home() {
             {SITE.description}
           </p>
 
-          <dl className="mt-3 grid w-full max-w-md grid-cols-3 gap-px overflow-hidden rounded-2xl border border-border/50 bg-border/50 text-center shadow-sm">
+          <dl className="mt-3 grid w-full max-w-md grid-cols-3 gap-px overflow-hidden rounded-2xl border border-border/50 bg-border/50 text-center shadow-sm dark:border-white/10 dark:bg-white/10">
             {stats.map((stat) => (
               <div
                 key={stat.label}
-                className="flex flex-col items-center justify-center gap-1.5 bg-card/70 px-3 py-5 backdrop-blur sm:px-4"
+                className="flex flex-col items-center justify-center gap-1.5 bg-card/70 px-3 py-5 backdrop-blur sm:px-4 dark:bg-card/85"
               >
                 <dt className="font-sans text-[0.65rem] tracking-[0.12em] text-muted-foreground uppercase">
                   {stat.label}

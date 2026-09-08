@@ -12,7 +12,7 @@ export const dynamic = "force-static";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = `${SITE.name} · ${SITE.fullName}`;
+export const alt = `${SITE.name}, ${SITE.fullName}`;
 
 export default async function Image() {
   const events = getAllEvents();
@@ -55,11 +55,11 @@ export default async function Image() {
             <div style={{ display: "flex", fontSize: 30, opacity: 0.8 }}>
               {formatDateNumeric(SITE.birthDate)}
             </div>
-            <div style={{ display: "flex", fontSize: 30, opacity: 0.45 }}>·</div>
+            <div style={{ display: "flex", width: 7, height: 7, borderRadius: 4, background: "#1c3049", opacity: 0.35 }} />
             <div style={{ display: "flex", fontSize: 30, opacity: 0.8 }}>
               {`${events.length} cột mốc`}
             </div>
-            <div style={{ display: "flex", fontSize: 30, opacity: 0.45 }}>·</div>
+            <div style={{ display: "flex", width: 7, height: 7, borderRadius: 4, background: "#1c3049", opacity: 0.35 }} />
             <div style={{ display: "flex", fontSize: 30, opacity: 0.8 }}>
               {`${photoCount} khoảnh khắc`}
             </div>
