@@ -66,7 +66,14 @@ export function ShaderPhoto({ photo, effect }: { photo: Photo; effect: ShaderEff
           style={{ width: "100%", height: "100%" }}
         />
       ) : (
-        <PhotoImage photo={photo} sizes="(max-width: 768px) 90vw, 520px" priority />
+        // h-full: khung ngoài đã cố định tỉ lệ 2:3, để h-auto thì ảnh lệch
+        // tỉ lệ sẽ ngắn hơn khung và hở một mảng ở đáy.
+        <PhotoImage
+          photo={photo}
+          sizes="(max-width: 768px) 90vw, 520px"
+          priority
+          className="h-full"
+        />
       )}
     </div>
   );

@@ -19,7 +19,7 @@ export type Photo = Omit<GeneratedPhoto, "srcSet"> & {
 const TILTS = [-3, 2.5, -1.5, 3, -2.5, 1.5, -2, 2];
 
 export function getPhotos(event: SiteEvent): Photo[] {
-  const { photoDir, defaultEffect, overrides = {} } = event.gallery;
+  const { photoDir, defaultEffect, overrides = {}, exclude = [] } = event.gallery;
   const generated = PHOTO_MANIFEST[photoDir];
 
   if (!generated) {
@@ -34,8 +34,19 @@ export function getPhotos(event: SiteEvent): Photo[] {
       throw new Error(`overrides của "${event.slug}" trỏ tới ảnh không tồn tại: ${id}`);
     }
   }
+  for (const id of exclude) {
+    if (!ids.has(id)) {
+      throw new Error(`exclude của "${event.slug}" trỏ tới ảnh không tồn tại: ${id}`);
+    }
+  }
 
-  return generated.map((photo, index) => {
+  // Lọc trước khi đánh số: alt phải là "ảnh 1..n" liên tục, không chừa lỗ ở
+  // chỗ ảnh bị bỏ.
+  const kept = exclude.length
+    ? generated.filter((photo) => !exclude.includes(photo.id))
+    : generated;
+
+  return kept.map((photo, index) => {
     const override = overrides[photo.id] ?? {};
     const srcSet = photo.srcSet.map((item) => ({ ...item, src: withBasePath(item.src) }));
     return {
@@ -48,4 +59,22 @@ export function getPhotos(event: SiteEvent): Photo[] {
       tilt: override.tilt ?? TILTS[index % TILTS.length],
     };
   });
+}
+
+/** Khổ dọc chuẩn của khung xoay (2:3), khớp với đa số ảnh máy ảnh. */
+export const CAROUSEL_RATIO = 2 / 3;
+
+// Lệch 7% thì object-cover chỉ cắt vài phần trăm mép, mắt không nhận ra.
+// Ảnh ngang lệch tới 0.73 nên bị loại — nhét ảnh ngang vào khung dọc thì hoặc
+// méo, hoặc mất gần nửa khuôn hình.
+const CAROUSEL_TOLERANCE = 0.1;
+
+/**
+ * Lọc ảnh hợp với khung xoay khổ dọc cố định. Gallery parallax không cần hàm
+ * này vì mỗi ảnh ở đó tự giữ tỉ lệ riêng.
+ */
+export function carouselPhotos(photos: Photo[]): Photo[] {
+  return photos.filter(
+    (photo) => Math.abs(photo.width / photo.height - CAROUSEL_RATIO) < CAROUSEL_TOLERANCE,
+  );
 }

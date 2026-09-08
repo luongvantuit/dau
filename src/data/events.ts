@@ -44,6 +44,8 @@ export type SiteEvent = {
     /** Khoá vào PHOTO_MANIFEST — chính là tên thư mục trong photos/. */
     photoDir: string;
     overrides?: Record<string, PhotoOverride>;
+    /** Id ảnh không muốn hiện. Ảnh mới thêm mặc định được hiện. */
+    exclude?: string[];
   };
   note?: string;
 };
@@ -66,6 +68,8 @@ export const EVENTS: SiteEvent[] = [
       // effect trong overrides.
       defaultEffect: "none",
       photoDir: "sinh-nhat-1-tuoi",
+      // Hai tấm này chỉ có ba mẹ, không có Đậu.
+      exclude: ["DSC05926", "IMG_8288"],
     },
   },
 ];

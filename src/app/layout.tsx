@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Baloo_2, Be_Vietnam_Pro } from "next/font/google";
 
+import { SiteHeader } from "@/components/site/site-header";
 import { SITE } from "@/data/site";
+import { MotionProvider } from "@/providers/motion-provider";
 import { ThemeProvider } from "@/providers/theme-provider";
 
 import "./globals.css";
@@ -43,7 +45,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <MotionProvider>
+            <SiteHeader />
+            {children}
+          </MotionProvider>
         </ThemeProvider>
       </body>
     </html>
