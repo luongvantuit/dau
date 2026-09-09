@@ -95,7 +95,12 @@ export function PhotoLightbox({
               photo={photo}
               sizes="(max-width: 768px) 92vw, 70vw"
               priority
-              className="max-h-[70vh] w-auto rounded-xl object-contain select-none"
+              // Chiều cao CỐ ĐỊNH, bề ngang suy ra từ tỉ lệ. Trước đây để
+              // max-h + w-auto: cả hai chiều đều auto, mà ảnh chưa tải thì
+              // trình duyệt chưa biết kích thước thật nên không có gì neo —
+              // thẻ ra đúng 0x0 và ảnh mờ 16px không có chỗ nào để vẽ. Lưới
+              // ảnh và carousel không dính vì chúng luôn có một chiều xác định.
+              className="h-[70vh] w-auto max-w-[92vw] rounded-xl object-contain select-none"
             />
             {photo.caption ? (
               <figcaption className="font-sans text-sm text-background/85">
