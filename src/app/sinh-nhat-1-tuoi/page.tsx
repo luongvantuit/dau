@@ -8,6 +8,7 @@ import { ParallaxGallery } from "@/components/gallery/parallax-gallery";
 import { MusicButton } from "@/components/site/music-button";
 import { ChevronLeftIcon } from "@/components/ui/chevron-left";
 import { SectionHeading } from "@/components/site/section-heading";
+import { SITE } from "@/data/site";
 import { getEvent } from "@/lib/events";
 import { carouselPhotos, getPhotos } from "@/lib/photos";
 
@@ -18,10 +19,22 @@ const SLUG = "sinh-nhat-1-tuoi";
 export function generateMetadata(): Metadata {
   const event = getEvent(SLUG);
   if (!event) return {};
+  const image = {
+    url: `${SITE.url}/${SLUG}/og.png`,
+    width: 1200,
+    height: 630,
+    type: "image/png",
+    alt: event.title,
+  };
   return {
     title: event.title,
     description: event.description,
-    openGraph: { title: event.title, description: event.description },
+    openGraph: {
+      title: event.title,
+      description: event.description,
+      images: [image],
+    },
+    twitter: { images: [image] },
   };
 }
 

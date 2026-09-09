@@ -6,17 +6,14 @@ import { getEvent } from "@/lib/events";
 import { loadOgFonts, loadOgPhoto } from "@/lib/og";
 import { getPhotos } from "@/lib/photos";
 
-// output: "export" không có runtime, nên route ảnh phải được đánh dấu tĩnh;
-// thiếu dòng này build đứt với "dynamic/revalidate not configured".
+// Vì sao là route handler tên "og.png" chứ không phải opengraph-image.tsx:
+// xem ghi chú ở src/app/og.png/route.tsx.
 export const dynamic = "force-static";
 
-export const size = { width: 1200, height: 630 };
-export const contentType = "image/png";
-export const alt = "Ảnh chia sẻ";
-
+const SIZE = { width: 1200, height: 630 };
 const SLUG = "sinh-nhat-1-tuoi";
 
-export default async function Image() {
+export async function GET() {
   const event = getEvent(SLUG);
   if (!event) return new Response("Not found", { status: 404 });
 
@@ -97,6 +94,7 @@ export default async function Image() {
         {/* Ảnh bìa. Bo góc và chừa lề để nó đọc ra như một tấm ảnh đặt lên nền,
             chứ không phải nửa khung hình bị cắt đôi. */}
         <div style={{ display: "flex", padding: "46px 46px 46px 0" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element -- Satori chỉ hiểu <img>, không chạy được next/image */}
           <img
             src={cover}
             width={380}
@@ -107,6 +105,6 @@ export default async function Image() {
         </div>
       </div>
     ),
-    { ...size, fonts: await loadOgFonts() },
+    { ...SIZE, fonts: await loadOgFonts() },
   );
 }

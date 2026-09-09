@@ -24,6 +24,17 @@ const sans = Be_Vietnam_Pro({
   weight: ["400", "500", "600"],
 });
 
+// Địa chỉ tuyệt đối, không phải "/og.png": metadataBase là
+// https://.../dau, mà new URL("/og.png", base) cắt mất phần "/dau" — thẻ og
+// sẽ trỏ ra ngoài gốc tên miền, nơi không có tệp nào.
+export const OG_IMAGE = {
+  url: `${SITE.url}/og.png`,
+  width: 1200,
+  height: 630,
+  type: "image/png",
+  alt: `${SITE.name}, ${SITE.fullName}`,
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
@@ -33,8 +44,13 @@ export const metadata: Metadata = {
     template: `%s của ${SITE.name}`,
   },
   description: SITE.description,
-  openGraph: { type: "website", locale: "vi_VN", siteName: SITE.name },
-  twitter: { card: "summary_large_image" },
+  openGraph: {
+    type: "website",
+    locale: "vi_VN",
+    siteName: SITE.name,
+    images: [OG_IMAGE],
+  },
+  twitter: { card: "summary_large_image", images: [OG_IMAGE] },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

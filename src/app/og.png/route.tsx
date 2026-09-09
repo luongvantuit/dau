@@ -6,22 +6,27 @@ import { getAllEvents } from "@/lib/events";
 import { loadOgFonts, loadOgPhoto } from "@/lib/og";
 import { getPhotos } from "@/lib/photos";
 
-// output: "export" không có runtime, nên route ảnh phải được đánh dấu tĩnh;
-// thiếu dòng này build đứt với "dynamic/revalidate not configured".
+// Route handler đặt ở thư mục tên "og.png" chứ KHÔNG dùng quy ước
+// opengraph-image.tsx. Quy ước đó xuất ra tệp không có phần mở rộng
+// (out/opengraph-image), mà GitHub Pages đoán Content-Type bằng đuôi tệp nên
+// trả về application/octet-stream. Trình xem trước của iMessage thấy không
+// phải ảnh thì bỏ qua, quay ra tự quét ảnh trong trang — thẻ chia sẻ hiện ra
+// một tấm ảnh ngẫu nhiên thay vì tấm này. Đường dẫn có đuôi .png thì Pages trả
+// đúng image/png.
 export const dynamic = "force-static";
 
-export const size = { width: 1200, height: 630 };
-export const contentType = "image/png";
-export const alt = `${SITE.name}, ${SITE.fullName}`;
+const SIZE = { width: 1200, height: 630 };
 
-export default async function Image() {
+export async function GET() {
   const events = getAllEvents();
   const photoCount = events.reduce((total, event) => total + getPhotos(event).length, 0);
   const palette = events[0]?.palette ?? ["#a8c6e8", "#f0c49a", "#8fb4dd", "#ffe9c9"];
   // Cùng một tấm ảnh bìa với trang sự kiện, để hai ảnh chia sẻ nhận ra là một
   // nhà. Ảnh thật quan trọng hơn hẳn chữ khi link nằm trong luồng chat.
   const first = events[0];
-  const cover = first ? await loadOgPhoto(first.gallery.photoDir, getPhotos(first)[0].id, 380, 538) : null;
+  const cover = first
+    ? await loadOgPhoto(first.gallery.photoDir, getPhotos(first)[0].id, 380, 538)
+    : null;
 
   return new ImageResponse(
     (
@@ -72,6 +77,7 @@ export default async function Image() {
 
         {cover ? (
           <div style={{ display: "flex", padding: "46px 46px 46px 0" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element -- Satori chỉ hiểu <img>, không chạy được next/image */}
             <img
               src={cover}
               width={380}
@@ -83,6 +89,6 @@ export default async function Image() {
         ) : null}
       </div>
     ),
-    { ...size, fonts: await loadOgFonts() },
+    { ...SIZE, fonts: await loadOgFonts() },
   );
 }
